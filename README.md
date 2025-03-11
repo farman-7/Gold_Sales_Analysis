@@ -49,7 +49,6 @@ Screenshots of the Power BI dashboard with key insights can be found in the `rep
 
 ## 📊 SQL Query: Sales Performance Over Time
 ```sql
--- Analyze Sales Performance Over Time
 SELECT 
 DATETRUNC(MONTH, order_date) AS Orders_Date,
 SUM(sales_amount) as Total_Sales,
@@ -62,7 +61,8 @@ ORDER BY DATETRUNC(MONTH, order_date);
 ```
 
 ### 📈 Output:
-![Sales Performance Over Time](images/Sales_performance_over_time.png)
+!![Sales proformance over time](https://github.com/user-attachments/assets/7f4522e6-a401-4034-ad2e-6f6d0364cebf)
+
 
 ## 📞 Contact
 For queries, feel free to connect via [LinkedIn](https://www.linkedin.com/in/yourprofile/) or email at your.email@example.com.
