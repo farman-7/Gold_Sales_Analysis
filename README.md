@@ -15,35 +15,6 @@ This project focuses on data analysis using **Power BI, SQL, and Python**. It in
 - **Python**: Data Cleaning & Analysis (pandas, NumPy, matplotlib, seaborn)
 - **Excel**: Data Preprocessing
 
-## 📁 Project Structure
-```
-📂 Data-Analysis-Project
-├── 📁 data            # Raw & Processed Data
-├── 📁 scripts         # Python scripts for data processing
-├── 📁 reports         # Power BI reports & dashboards
-├── 📁 sql_queries     # SQL scripts for data transformation
-├── 📁 images          # Project screenshots
-├── README.md         # Project documentation
-```
-
-## 🚀 Getting Started
-1. **Clone the Repository**:
-   ```sh
-   git clone https://github.com/yourusername/Data-Analysis-Project.git
-   cd Data-Analysis-Project
-   ```
-2. **Set up Virtual Environment (Python)**:
-   ```sh
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-3. **Install Dependencies**:
-   ```sh
-   pip install -r requirements.txt
-   ```
-4. **Run SQL Scripts** to create and populate tables.
-5. **Load Data into Power BI** and visualize insights.
-
 ## 📌 Power BI Dashboard
 Screenshots of the Power BI dashboard with key insights can be found in the `reports` folder.
 
@@ -63,7 +34,7 @@ ORDER BY DATETRUNC(MONTH, order_date);
 ### 📈 Output:
 ![Sales proformance over time](https://github.com/user-attachments/assets/7f4522e6-a401-4034-ad2e-6f6d0364cebf)
 
-### Running Total and Moving Average of Sales
+### 📊 Running Total and Moving Average of Sales
 ```sql
 SELECT 
 order_date,
@@ -84,9 +55,14 @@ GROUP BY DATETRUNC(year, order_date)
 ### 📈 Output:
 ![Total_sales](https://github.com/user-attachments/assets/1a8ffcce-951e-4f75-9870-0122cbada61b)
 
-### Performance Analysis
-   ## Analyze the yearly performance of products by comparing each
-   ## --Product's sales to both its average performance and the previous year's sales.
+## 📊 Performance Analysis
+
+### 🔍 Overview
+This analysis evaluates the **yearly performance of products** by:
+- Comparing each product’s sales to its **average performance**.
+- Assessing the **year-over-year (YoY) growth**.
+
+### 📌 SQL Query
 
 ```sql
 WITH yearly_product_sales AS (
@@ -120,11 +96,20 @@ END py_change
 FROM yearly_product_sales
 ORDER BY product_name, order_year;
 ```
+📌 Insights:
+Products with Above Avg sales perform better than their historical average.
+Year-over-Year changes (Increase/Decrease) help track product demand trends.
+
 ### 📈 Output:
 ![Performance analysis](https://github.com/user-attachments/assets/61bc2fc5-351e-4cbc-90b3-d18b962b98a4)
 
-### Part-To-Whole Analysis
-## -- Which Categories contribute the most to overall sales
+## 📊 Part-To-Whole Analysis
+
+### 🔍 Overview
+This analysis identifies **which product categories contribute the most to overall sales**.  
+By calculating the **percentage share of each category**, businesses can focus on the most profitable ones.
+
+### 📌 SQL Query
 ```sql
 WITH category_sales AS (
 SELECT 
@@ -143,6 +128,11 @@ CONCAT(ROUND((CAST(Total_sales AS FLOAT) / SUM(Total_sales) OVER ()) * 100, 2),'
 FROM category_sales
 ORDER BY Total_sales DESC;
 ```
+📌 Insights:
+Electronics contributes the highest (33.33%) to overall sales.
+Furniture & Clothing together account for nearly 50% of total sales.
+Lower-performing categories (e.g., Accessories, Others) may require marketing boosts. ** Need to fix it **
+
 ### 📈 Output:
 ![part-to-whole](https://github.com/user-attachments/assets/132ffb3a-3236-45ba-95c0-a6f0a51068b8)
 
