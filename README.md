@@ -1,22 +1,26 @@
-# Data Analysis Project
+# 📊 Gold Sales Analysis Project  
 
-## 📌 Overview
-This project focuses on data analysis using **Power BI, SQL, and Python**. It involves data cleaning, transformation, visualization, and insights generation to aid business decision-making.
+Welcome to the **Gold Sales Analysis** project! 🚀  
+This project utilizes **SQL** to analyze gold sales data and extract valuable business insights.  
 
-## 📊 Features
-- **Data Extraction & Cleaning**: Using SQL and Python (pandas, NumPy)
-- **Data Transformation**: ETL pipeline with SQL queries
-- **Data Visualization**: Power BI dashboards
-- **Key Metrics & Insights**: Business trends, KPIs, forecasting
+## 📌 Project Overview  
 
-## 🔧 Technologies Used
-- **Power BI**: Dashboarding & Reporting
-- **SQL**: Data Extraction, Transformation & Querying
-- **Python**: Data Cleaning & Analysis (pandas, NumPy, matplotlib, seaborn)
-- **Excel**: Data Preprocessing
+This analysis is built upon three key tables:  
 
-## 📌 Power BI Dashboard
-Screenshots of the Power BI dashboard with key insights can be found in the `reports` folder.
+- **📦 gold_dim_product** → Contains product details such as name, category, cost, and pricing.  
+- **👥 gold_dim_customer** → Stores customer information, including demographics and purchasing behavior.  
+- **💰 gold_fact_sales** → Captures sales transactions, including order dates, quantities, and total revenue.  
+
+## 🔍 Key Business Questions Answered  
+
+✅ **Sales Performance Over Time** – How have sales and customer engagement evolved?  
+✅ **Total & Running Sales Analysis** – What is the overall financial growth?  
+✅ **Product Performance Analysis** – Which products are performing well?  
+✅ **Customer Segmentation** – Who are the high-value, regular, and new customers?  
+✅ **Part-to-Whole Analysis** – Which product categories contribute the most revenue?  
+✅ **Data Segmentation** – How are products distributed by cost?  
+
+This project provides **interactive reports and actionable insights** to support **strategic decision-making**.
 
 # 📊 Sales Performance Over Time  
 
