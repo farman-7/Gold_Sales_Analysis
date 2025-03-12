@@ -433,7 +433,6 @@ This report consolidates key product metrics and behaviors to analyze **sales pe
 ## 📜 SQL Query  
 
 ```sql
-CREATE VIEW gold.report_products AS
 WITH base_query AS (
     -- 1️⃣ Base Query: Retrieves sales data and product details
     SELECT
