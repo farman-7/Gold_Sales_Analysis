@@ -333,119 +333,108 @@ Older customers (50 and above) tend to spend more per order, possibly due to hig
 Customers in the 40-49 age range form a significant portion of both VIP and Regular segments.
 
 Avg Monthly Spend varies significantly among customer segments, which can help create personalized offers.
+### 📈 Output:
+![Customer_Report](https://github.com/user-attachments/assets/e22451a0-e609-43cf-8f35-a94807925e67)
 
+# 📊 Product Report  
 
+## 📌 Purpose  
+This report consolidates key product metrics and behaviors to analyze **sales performance** and **product segmentation**.
 
-/*
-=====================================================================================================================================================
-Product Report
-=====================================================================================================================================================
-Purpose:
+## 🔍 Highlights  
+- **Product Information**: Includes **product name, category, subcategory, and cost**.  
+- **Segmentation**: Products are categorized as:  
+  - 🏆 **High-Performers**: Total sales **> 50,000**  
+  - ⚖️ **Mid-Range**: Total sales **10,000 - 50,000**  
+  - 📉 **Low-Performers**: Total sales **< 10,000**  
+- **Aggregated Metrics**:  
+  - Total orders  
+  - Total sales  
+  - Total quantity sold  
+  - Unique customers  
+  - Product lifespan (in months)  
+- **Key Performance Indicators (KPIs)**:  
+  - **Recency** (months since last sale)  
+  - **Average Order Revenue (AOR)**  
+  - **Average Monthly Revenue**  
 
-	-This report consolidates key product metrics and behaviors.
+---
 
-Highlights:
-
-	1. Gathers essential fields such as product name, category, subcategory, and cost.
-	2. Segments products by revenue to identify High-Performers, Mid-Range, or Low-Performers
-	3. Aggregates product-level metrics:
-		- total orders
-		- total sales
-		- total quantity sold
-		- total customers (unique)
-		- lifespan (in months)
-	4. Calculates valuable KPIS:
-		- recency (months since last sale)
-		- average order revenue (AOR)
-		- average monthly revenue
-=====================================================================================================================================================
-*/
-
-
+## 📜 SQL Query  
 
 ```sql
+CREATE VIEW gold.report_products AS
 WITH base_query AS (
-/*
-=====================================================================================================================================================
-1) Base Query: Retrieves core columns from fact_sales and dim_products
-===================================================================================================================================================== */
-SELECT
-f.order_number,
-f.order_date,
-f.customer_key,
-f.sales_amount,
-f.quantity,
-p.product_key,
-p.product_name,
-p.category,
-p.subcategory,
-p.cost
-FROM [gold.fact_sales] f
-LEFT JOIN [gold.dim_products] p
-ON f.product_key = p.product_key
-WHERE order_date IS NOT NULL --only consider valid sales dates
+    -- 1️⃣ Base Query: Retrieves sales data and product details
+    SELECT
+        f.order_number,
+        f.order_date,
+        f.customer_key,
+        f.sales_amount,
+        f.quantity,
+        p.product_key,
+        p.product_name,
+        p.category,
+        p.subcategory,
+        p.cost
+    FROM [gold.fact_sales] f
+    LEFT JOIN [gold.dim_products] p
+    ON f.product_key = p.product_key
+    WHERE order_date IS NOT NULL
 ),
 
 product_aggregations AS (
-/*
-=====================================================================================================================================================
-2) Product Aggregations: Summarizes key metrics at the product level.
-=====================================================================================================================================================*/
+    -- 2️⃣ Product Aggregations: Summarizes key product-level metrics
+    SELECT
+        product_key,
+        product_name,
+        category,
+        subcategory,
+        cost,
+        DATEDIFF(MONTH, MIN(order_date), MAX(order_date)) AS lifespan,
+        MAX(order_date) AS last_sale_date,
+        COUNT(DISTINCT order_number) AS total_orders,
+        COUNT(DISTINCT customer_key) AS total_customers,
+        SUM(sales_amount) AS total_sales,
+        SUM(quantity) AS total_quantity,
+        ROUND(AVG(CAST(sales_amount AS FLOAT) / NULLIF(quantity, 0)), 1) AS avg_selling_price
+    FROM base_query
+    GROUP BY product_key, product_name, category, subcategory, cost
+)
+
+-- 3️⃣ Final Query: Combines product results into a structured report
 SELECT
-	product_key,
-	product_name,
-	category,
-	subcategory,
-	cost,
-	DATEDIFF(MONTH, MIN(order_date), MAX(order_date)) AS lifespan,
-	MAX(order_date) AS last_sale_date,
-	COUNT (DISTINCT order_number) AS total_orders,
-	COUNT (DISTINCT customer_key) AS total_customers,
-	SUM(sales_amount) AS total_sales,
-	SUM(quantity) AS total_quantity,
-	ROUND (AVG(CAST(sales_amount AS FLOAT) / NULLIF (quantity, 0)),1) AS avg_selling_price
-FROM base_query
-GROUP BY
-	product_key,
-	product_name,
-	category,
-	subcategory,
-	cost)
-/*
-=====================================================================================================================================================
-3) Final Query: Combines all product results into one output
-=====================================================================================================================================================*/
-SELECT
-	product_key,
-	product_name,
-	category,
-	subcategory,
-	cost,
-	last_sale_date,
-	DATEDIFF(MONTH, last_sale_date, GETDATE()) AS recency_in_months,
-	CASE
-		WHEN total_sales > 50000 THEN 'High-Performer'
-		WHEN total_sales >= 10000 THEN 'Mid-Range'
-		ELSE 'Low-Performer'
-	END AS product_segment,
-	lifespan,
-	total_orders,
-	total_sales,
-	total_quantity,
-	total_customers,
-	avg_selling_price,
-	--Average Order Revenue (AOR)
-	CASE
-		WHEN total_orders = 0 THEN 0
-		ELSE total_sales / total_orders
-	END AS avg_order_revenue,
-	-- Average Monthly Revenue
-	CASE
-		WHEN lifespan = 0 THEN total_sales
-		ELSE total_sales / lifespan
-	END AS avg_monthly_revenue
-FROM product_aggregations
-```sql
+    product_key,
+    product_name,
+    category,
+    subcategory,
+    cost,
+    last_sale_date,
+    DATEDIFF(MONTH, last_sale_date, GETDATE()) AS recency_in_months,
+    CASE
+        WHEN total_sales > 50000 THEN 'High-Performer'
+        WHEN total_sales >= 10000 THEN 'Mid-Range'
+        ELSE 'Low-Performer'
+    END AS product_segment,
+    lifespan,
+    total_orders,
+    total_sales,
+    total_quantity,
+    total_customers,
+    avg_selling_price,
+    -- Average Order Revenue (AOR)
+    CASE WHEN total_orders = 0 THEN 0 ELSE total_sales / total_orders END AS avg_order_revenue,
+    -- Average Monthly Revenue
+    CASE WHEN lifespan = 0 THEN total_sales ELSE total_sales / lifespan END AS avg_monthly_revenue
+FROM product_aggregations;
+```
+### 📈 Output:
+![Product_report](https://github.com/user-attachments/assets/3918ce84-cfe9-49cd-aa98-fb5a351ff6ba)
+
+📌 Actionable Insights
+✔️ Stock High-Performing Products: Ensure availability of popular bikes.
+✔️ Analyze Low-Performers: Identify reasons for poor sales.
+✔️ Optimize Pricing Strategy: Adjust pricing for low-selling but high-cost products.
 
 ## 📞 Contact
 For queries, feel free to connect via [LinkedIn](https://www.linkedin.com/in/yourprofile/) or email at your.email@example.com.
