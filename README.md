@@ -136,8 +136,13 @@ Lower-performing categories (e.g., Accessories, Others) may require marketing bo
 ### 📈 Output:
 ![part-to-whole](https://github.com/user-attachments/assets/132ffb3a-3236-45ba-95c0-a6f0a51068b8)
 
-## Data Segmentation
-## Segment products into cost range and count how many product fall into each segment 
+## 🔍 Data Segmentation
+
+### 📊 Overview
+This analysis segments products into different **cost ranges** and counts how many products fall into each segment.  
+Understanding product distribution by price helps in **pricing strategy, inventory management, and sales forecasting**.
+
+### 📌 SQL Query
 
 ```sql
 WITH Product_segments AS (
@@ -159,12 +164,21 @@ FROM Product_segments
 GROUP BY cost_range
 ORDER BY total_products DESC
 ```
+📌 Key Insights
+Most products (110) fall in the "Below 100" range, indicating a high volume of low-cost items.
+Products priced between 100-500 are the second most common (101), suggesting mid-range pricing is also popular.
+High-cost products (Above 1000) are the least common (39), which could indicate either a niche market or a strategic focus on affordability.
+### 📈 Output:
+![Segment_analysis](https://github.com/user-attachments/assets/b539b48c-ba8b-4257-b46e-21904f71a64c)
 
-/*Group customers into three segments based on their spending behavior:
-	-VIP: Customers with at least 12 months of history and spending more than €5,000. Regular: Customers with at least 12 months of history but spending €5,000 or less.
-	-New: Customers with a lifespan less than 12 months.
-And find the total number of customers by each group
-*/
+
+## 🔍 Customer Segmentation
+
+### 📊 Overview
+This analysis groups customers into three segments based on their **spending behavior and lifespan**:
+- **VIP:** Customers with at least 12 months of history and spending **more than €5,000**.
+- **Regular:** Customers with at least 12 months of history but spending **€5,000 or less**.
+- **New:** Customers with a lifespan of **less than 12 months**.
 ```sql
 WITH customer_spending AS (
 SELECT
@@ -192,36 +206,42 @@ FROM (
 	FROM customer_spending )t
 GROUP BY customer_segment
 ORDER BY total_customers DESC
-```sql
+```
+📌 Key Insights
+New customers (14,631) make up the largest segment, indicating a strong acquisition rate.
+Regular customers (2,198) suggest a moderate level of customer retention, but many have not crossed the VIP threshold.
+VIP customers (1,655) are the most valuable but also the smallest group, highlighting an opportunity for targeted retention strategies.
+### 📈 Output:
+![customer segment](https://github.com/user-attachments/assets/f8676de4-0648-4c22-a319-b62875a4970d)
 
-/*
-===============================================================================================
-Customer Report
-===============================================================================================
-Purpose:
+# 📊 Customer Report
 
- - This report consolidates key customer metrics and behaviors
+## 📍 Overview
+This report consolidates key customer metrics and behaviors to better understand customer engagement, purchase patterns, and segmentation.
 
-Highlights:
-	1. Gathers essential fields such as names, ages, and transaction details.
-	2. Segments customers into categories (VIP, Regular, New) and age groups.
-	3. Aggregates customer-level metrics:
-		- total orders
-		- total sales
-		- total quantity purchased
-		- total products
-		- lifespan (in months)
-4. Calculates valuable KPIS:
+## 🔍 Purpose
+- Gathers essential customer details: **name, age, transaction history**.
+- Segments customers into **VIP, Regular, and New categories**.
+- Groups customers based on **age brackets**.
+- Aggregates key customer metrics:
+  - **Total orders**
+  - **Total sales**
+  - **Total quantity purchased**
+  - **Total products purchased**
+  - **Lifespan (in months)**
 
-	- recency (months since last order)
-	- average order value
-	- average monthly spend
-=============================================================================================
-*/
+## 📊 Key KPIs Calculated
+- **Recency:** Months since the last order.
+- **Average Order Value (AOV):** Average revenue per order.
+- **Average Monthly Spend:** Spending trend over the customer’s lifespan.
+
+---
+
+## 📌 SQL Query
 ```sql
 With base_query AS (
 /*--------------------------------------------------------------------------------------------
-1) Base Query Retrieves core columns from table
+  Base Query Retrieves core columns from table
 -----------------------------------------------------------------------------------------------*/
 SELECT
 f.order_number,
@@ -242,7 +262,7 @@ WHERE order_date IS NOT NULL
 
 , customer_aggregation AS(
 /*--------------------------------------------------------------------------------------------
-	2. Segments customers into categories (VIP, Regular, New) and age groups.
+    Segments customers into categories (VIP, Regular, New) and age groups.
 -----------------------------------------------------------------------------------------------*/
 SELECT 
 	customer_key,
@@ -296,7 +316,23 @@ CASE
 END AS avg_monthly_spend
 FROM customer_aggregation
 ```
+🔍 Key Insights from the Data
 
+📌 Customer Segmentation:
+
+VIP customers have a high average order value (~€2,700), indicating they are frequent and high-value buyers.
+
+Regular customers have a lower spending trend, which suggests they need incentives to increase their purchase frequency.
+
+New customers dominate the dataset, suggesting a strong acquisition rate but an opportunity to improve retention.
+
+📌 Spending Trends:
+
+Older customers (50 and above) tend to spend more per order, possibly due to higher disposable income.
+
+Customers in the 40-49 age range form a significant portion of both VIP and Regular segments.
+
+Avg Monthly Spend varies significantly among customer segments, which can help create personalized offers.
 
 
 
