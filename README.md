@@ -18,7 +18,19 @@ This project focuses on data analysis using **Power BI, SQL, and Python**. It in
 ## 📌 Power BI Dashboard
 Screenshots of the Power BI dashboard with key insights can be found in the `reports` folder.
 
-## 📊 SQL Query: Sales Performance Over Time
+# 📊 Sales Performance Over Time  
+
+## 📌 Purpose  
+This report analyzes **monthly sales trends**, **customer engagement**, and **total quantity sold** over time. It helps in identifying **sales growth patterns, seasonality, and customer behavior trends**.  
+
+## 🔍 Key Metrics  
+- **Total Sales**: Sum of sales amount for each month.  
+- **Total Customers**: Unique customers who made purchases each month.  
+- **Total Quantity Sold**: Total product quantity sold per month.  
+
+---
+
+## 📜 SQL Query  
 ```sql
 SELECT 
 DATETRUNC(MONTH, order_date) AS Orders_Date,
@@ -30,11 +42,36 @@ WHERE order_date IS NOT NULL
 GROUP BY DATETRUNC(MONTH, order_date)
 ORDER BY DATETRUNC(MONTH, order_date);
 ```
+## 📌 Insights: 
 
+### 1️⃣ Sales & Customers Growth 🚀  
+- Sales grew from **43,419 (Dec 2010) → 1,673,261 (Oct 2013)**.  
+- Customers increased from **14 → 2,073**, showing a strong customer base expansion.  
+
+### 2️⃣ Sales Peaks & Seasonality 📅  
+- Major spikes in **Aug 2012, Jan 2013, and Oct 2013** suggest seasonal trends (holidays/promotions).  
+
+### 3️⃣ Rising Product Demand 📦  
+- Total quantity sold increased from **14 → 5,304**, indicating strong market demand. 
 ### 📈 Output:
 ![Sales proformance over time](https://github.com/user-attachments/assets/7f4522e6-a401-4034-ad2e-6f6d0364cebf)
 
-### 📊 Running Total and Moving Average of Sales
+---
+
+# 📊 Total Sales and Running Sales Analysis  
+
+## 📌 Purpose  
+This report analyzes **annual total sales**, **cumulative sales growth over time**, and **moving average price trends** to understand the financial performance of the business.  
+
+## 🔍 Key Metrics  
+- **Total Sales**: Sum of sales amount for each year.  
+- **Running Total Sales**: Cumulative sum of total sales over time.  
+- **Moving Average Price**: The average price per year, considering all previous years' prices.  
+
+---
+
+## 📜 SQL Query  
+
 ```sql
 SELECT 
 order_date,
@@ -52,8 +89,23 @@ WHERE order_date IS NOT NULL
 GROUP BY DATETRUNC(year, order_date)
 ) t;
 ```
+## 📌 Insights  
+
+### 📈 Sales Growth 🚀  
+- The total sales **increased significantly** over the years, peaking in **2013**.  
+
+### 💰 Cumulative Revenue 📊  
+- The **running total sales** show **steady business expansion**, reaching **29 million+ by 2014**.  
+
+### 📉 Price Trend 💵  
+- The **moving average price is decreasing**, which may indicate:  
+  - **Discount strategies** to boost sales.  
+  - **Market competition** affecting pricing.  
+  - **Product diversification** with different pricing models.
 ### 📈 Output:
 ![Total_sales](https://github.com/user-attachments/assets/1a8ffcce-951e-4f75-9870-0122cbada61b)
+
+---
 
 ## 📊 Performance Analysis
 
@@ -96,12 +148,19 @@ END py_change
 FROM yearly_product_sales
 ORDER BY product_name, order_year;
 ```
-📌 Insights:
-Products with Above Avg sales perform better than their historical average.
-Year-over-Year changes (Increase/Decrease) help track product demand trends.
+## 📌 Key Insights  
+
+### 🚀 High-Performing Products  
+- Products with **above-average sales** perform **better than their historical average**, indicating consistent demand.  
+
+### 📈 Year-over-Year Trends  
+- **Tracking yearly sales changes** (increase/decrease) helps in understanding **product demand trends** and market shifts.  
+
 
 ### 📈 Output:
 ![Performance analysis](https://github.com/user-attachments/assets/61bc2fc5-351e-4cbc-90b3-d18b962b98a4)
+
+---
 
 ## 📊 Part-To-Whole Analysis
 
@@ -128,13 +187,22 @@ CONCAT(ROUND((CAST(Total_sales AS FLOAT) / SUM(Total_sales) OVER ()) * 100, 2),'
 FROM category_sales
 ORDER BY Total_sales DESC;
 ```
-📌 Insights:
-Electronics contributes the highest (33.33%) to overall sales.
-Furniture & Clothing together account for nearly 50% of total sales.
-Lower-performing categories (e.g., Accessories, Others) may require marketing boosts. ** Need to fix it **
+## 📌 Insights  
+
+- **Bikes dominate sales**, contributing **96.46%** of total revenue.  
+- **Accessories (2.39%)** and **Clothing (1.16%)** have a minor share in total sales.  
+- The business is **highly dependent on Bike sales**, showing strong market dominance but also posing a **risk if demand shifts**.  
+
+## 📌 Recommendation  
+
+✔️ **Diversify revenue streams** by promoting Accessories and Clothing.  
+✔️ **Explore cross-selling strategies** to encourage customers to buy complementary products.  
+✔️ **Monitor market trends** to reduce dependency on a single category. 
 
 ### 📈 Output:
 ![part-to-whole](https://github.com/user-attachments/assets/132ffb3a-3236-45ba-95c0-a6f0a51068b8)
+
+---
 
 ## 🔍 Data Segmentation
 
@@ -164,13 +232,16 @@ FROM Product_segments
 GROUP BY cost_range
 ORDER BY total_products DESC
 ```
-📌 Key Insights
-Most products (110) fall in the "Below 100" range, indicating a high volume of low-cost items.
-Products priced between 100-500 are the second most common (101), suggesting mid-range pricing is also popular.
-High-cost products (Above 1000) are the least common (39), which could indicate either a niche market or a strategic focus on affordability.
+## 📌 Key Insights  
+
+- **Majority of products (110)** are priced **below ₹100**, indicating a high volume of low-cost items.  
+- **Mid-range products (₹100 - ₹500)** are the **second most common (101)**, showing balanced pricing diversity.  
+- **High-cost products (₹1000+)** are the **least common (39)**, suggesting a **niche market** or a **strategic focus on affordability**.  
+
 ### 📈 Output:
 ![Segment_analysis](https://github.com/user-attachments/assets/b539b48c-ba8b-4257-b46e-21904f71a64c)
 
+---
 
 ## 🔍 Customer Segmentation
 
@@ -207,12 +278,16 @@ FROM (
 GROUP BY customer_segment
 ORDER BY total_customers DESC
 ```
-📌 Key Insights
-New customers (14,631) make up the largest segment, indicating a strong acquisition rate.
-Regular customers (2,198) suggest a moderate level of customer retention, but many have not crossed the VIP threshold.
-VIP customers (1,655) are the most valuable but also the smallest group, highlighting an opportunity for targeted retention strategies.
+## 📌 Key Insights  
+
+- **New Customers (14,631)** form the largest segment, indicating a strong acquisition rate.  
+- **Regular Customers (2,198)** show moderate retention, but many haven't reached the VIP threshold.  
+- **VIP Customers (1,655)** are the **most valuable but smallest group**, presenting an opportunity for targeted retention strategies.  
+
 ### 📈 Output:
 ![customer segment](https://github.com/user-attachments/assets/f8676de4-0648-4c22-a319-b62875a4970d)
+
+---
 
 # 📊 Customer Report
 
@@ -316,25 +391,20 @@ CASE
 END AS avg_monthly_spend
 FROM customer_aggregation
 ```
-🔍 Key Insights from the Data
+# 🔍 Key Insights from the Data 
+## 📌 Customer Segmentation  
+- **VIP Customers** have a **high average order value (~€2,700)**, indicating frequent and high-value purchases.  
+- **Regular Customers** show a lower spending trend, suggesting they need **incentives to increase purchase frequency**.  
+- **New Customers** dominate the dataset, highlighting a **strong acquisition rate but a retention opportunity**.  
 
-📌 Customer Segmentation:
-
-VIP customers have a high average order value (~€2,700), indicating they are frequent and high-value buyers.
-
-Regular customers have a lower spending trend, which suggests they need incentives to increase their purchase frequency.
-
-New customers dominate the dataset, suggesting a strong acquisition rate but an opportunity to improve retention.
-
-📌 Spending Trends:
-
-Older customers (50 and above) tend to spend more per order, possibly due to higher disposable income.
-
-Customers in the 40-49 age range form a significant portion of both VIP and Regular segments.
-
-Avg Monthly Spend varies significantly among customer segments, which can help create personalized offers.
+## 📌 Spending Trends  
+- **Older Customers (50+)** tend to spend **more per order**, possibly due to higher disposable income.  
+- Customers aged **40-49** form a **significant portion of both VIP and Regular segments**.  
+- **Average Monthly Spend** varies across customer segments, which can help in **creating personalized offers**.  
 ### 📈 Output:
 ![Customer_Report](https://github.com/user-attachments/assets/e22451a0-e609-43cf-8f35-a94807925e67)
+
+---
 
 # 📊 Product Report  
 
@@ -431,10 +501,11 @@ FROM product_aggregations;
 ### 📈 Output:
 ![Product_report](https://github.com/user-attachments/assets/3918ce84-cfe9-49cd-aa98-fb5a351ff6ba)
 
-📌 Actionable Insights
-✔️ Stock High-Performing Products: Ensure availability of popular bikes.
-✔️ Analyze Low-Performers: Identify reasons for poor sales.
-✔️ Optimize Pricing Strategy: Adjust pricing for low-selling but high-cost products.
+# 📌 Actionable Insights  
+
+✔️ **Stock High-Performing Products**: Ensure availability of popular bikes to meet demand.  
+✔️ **Analyze Low-Performers**: Identify reasons for poor sales and consider promotions or discontinuation.  
+✔️ **Optimize Pricing Strategy**: Adjust pricing for low-selling but high-cost products to improve profitability.  
 
 ## 📞 Contact
 For queries, feel free to connect via [LinkedIn](https://www.linkedin.com/in/yourprofile/) or email at your.email@example.com.
